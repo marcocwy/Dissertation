@@ -7,9 +7,6 @@ class Data:
         hist = data.history(period="max") # get historical market data
         
         self.df = hist[['Close']] # Extract close
-        #print((self.df))
-
-        #print(df['Close'].values[0])
 
     def add_column(self, heading, values):
         '''
@@ -21,7 +18,7 @@ class Data:
         '''
         Poplate data frame with features
         '''
-        #self.df['MA'] = self.df.rolling(window=5).mean()
+        # self.df['MA'] = self.df.rolling(window=5).mean()
         # self.sma(5)
         # self.sma(6)
         # self.sma(10)
@@ -34,7 +31,10 @@ class Data:
         # self.rsi(14, SMA=True)
         # self.rsi(14, SMA=False)
         # self.ppo()
-        self.sd(5)
+        # self.sd(5)
+        # self.bias(5, SMA=True)
+        # self.bias(5, SMA=False)
+        # self.roc(3)
 
         print(self.df)
 
@@ -89,7 +89,7 @@ class Data:
 
         self.add_column(heading, vals)
     
-    def rsi(self, n, SMA=True):
+    def rsi(self, n, SMA):
         '''
         Relative Strength Index
         '''
@@ -167,6 +167,45 @@ class Data:
             vals += [val]
         self.add_column(heading, vals)
 
-            
+    def bias(self, n, SMA):
+        '''
+        Deviation rate (BIAS) indicator with window size n
+        '''
+
+        if SMA:
+            heading = 'BIAS(SMA)'
+            ma = self.df['Close'].rolling(n).mean()
+        else: #EMA
+            heading = 'BIAS(EMA)'
+            ma = self.df['Close'].ewm(span = n, adjust=True, min_periods = n).mean()
+
+        ma_list = ma.tolist()
+
+        vals = []
+        for ma, val in zip(ma_list, self.df['Close']): # for every value in list
+            dev_rate = (val - ma) / ma * 100
+            vals.append(dev_rate)
+
+        self.add_column(heading, vals)
+
+    def roc(self, n):
+        '''
+        Rate of Change indicator comparing current price and n days ago
+        '''
+        heading = str(n) + "ROC" # column heading
+        vals = []
+        length = self.df.shape[0] # set length to remaining values to be calculated
+        for i in range(length):
+            if (i - n) < 0:
+                roc = np.nan
+            else:
+                current_val = self.df['Close'].values[i]
+                previous_val = self.df['Close'].values[i-n]
+                roc = (current_val - previous_val) / previous_val * 100
+
+            vals.append(roc)
+        print(vals)
+
+        self.add_column(heading, vals)
 
                 
