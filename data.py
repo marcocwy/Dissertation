@@ -20,36 +20,36 @@ class Data:
         Poplate data frame with features
         '''
         # self.df['MA'] = self.df.rolling(window=5).mean()
-        self.sma(5)
-        self.sma(6)
-        self.sma(10)
-        self.sma(20)
-        self.ema(5)
-        self.ema(6)
-        self.ema(10)
-        self.ema(20)
-        self.macd() 
-        self.rsi(14, SMA=True) #12
-        self.rsi(14, SMA=False) #12
-        self.ppo()
-        self.sd(5)
-        self.bias(5, SMA=True)
-        self.bias(5, SMA=False)
-        self.bias(10, SMA=True)
-        self.bias(10, SMA=False)
-        self.roc(6)
-        self.roc(10)
-        self.roc(20)
-        self.so(kn=9)
-        self.so(kn=9, dn=3)
+        self.add_column("5SMA"        ,self.sma(5))
+        self.add_column("6SMA"        ,self.sma(6))
+        self.add_column("10SMA"       ,self.sma(10))
+        self.add_column("20SMA"       ,self.sma(20))
+        self.add_column("5EMA"        ,self.ema(5))
+        self.add_column("6EMA"        ,self.ema(6))
+        self.add_column("10EMA"       ,self.ema(10))
+        self.add_column("20EMA"       ,self.ema(20))
+        self.add_column("MACD"        ,self.macd()) 
+        self.add_column("14RSI(SMA)"  ,self.rsi(14, SMA=True)) 
+        self.add_column("14RSI(EMA)"  ,self.rsi(14, SMA=False)) 
+        self.add_column("PPO"         ,self.ppo()) 
+        self.add_column("5SD"         ,self.sd(5))
+        self.add_column("BIAS(5SMA)"  ,self.bias(5, SMA=True))
+        self.add_column("BIAS(5EMA)"  ,self.bias(5, SMA=False))
+        self.add_column("BIAS(10SMA)" ,self.bias(10, SMA=True))
+        self.add_column("BIAS(10EMA)" ,self.bias(10, SMA=False))
+        self.add_column("5ROC"        ,self.roc(5))
+        self.add_column("6ROC"        ,self.roc(6))
+        self.add_column("10ROC"       ,self.roc(10))
+        self.add_column("20ROC"       ,self.roc(20))
+        self.add_column("9K"          ,self.sok(9))
+        self.add_column("9D"          ,self.sod(9, 3))
         
         print(self.df)
 
     def sma(self, n):
         ''' 
-        simple moving average with window size n
+        return a list of simple moving average with window size n
         '''
-        heading = str(n) + "SMA" # column heading
         vals = [] # list of all moving average values
 
         for i in range(n - 1): # populating first n-1 items since values can not be calculated
@@ -67,20 +67,20 @@ class Data:
             val /= n #work out average
             vals += [val]
 
-        self.add_column(heading, vals)
+        return vals
 
     
     def ema(self, n):
-        heading = str(n) +'EMA'
+
         vals = self.df.ewm(span = n, adjust=True, min_periods = n).mean() #add min_period
         vals = vals['Close'].tolist()
-        self.add_column(heading, vals)
+
+        return vals
 
     def macd(self):
         '''
         Moving Average Convergence Divergence between 26 days and 12 days
         '''
-        heading = 'MACD'
         fast = 12
         slow = 26
         vals1 = self.df.ewm(span = fast, adjust=True, min_periods = fast).mean() #Fast length EMA of 12 days
@@ -94,7 +94,7 @@ class Data:
         for val1, val2 in zip(vals1, vals2): # for every value in list
             vals.append(val1 - val2) #calculate difference
 
-        self.add_column(heading, vals)
+        return vals
     
     def rsi(self, n, SMA):
         '''
@@ -108,32 +108,27 @@ class Data:
 
         #ema up
         if SMA:
-            heading = 'RSI(SMA)'
             ma_up = up.rolling(n).mean()
             ma_down = down.rolling(n).mean()
         else: #EMA
-            heading = 'RSI(EMA)'
             ma_up = up.ewm(span = n, adjust=True, min_periods = n).mean()
             ma_down = down.ewm(span = n, adjust=True, min_periods = n).mean()
 
         up_list = ma_up.tolist()
         down_list = ma_down.tolist()
 
-        # print(up_list)
-        # print(down_list)
         vals = []
         for up, down in zip(up_list, down_list): # for every value in list
             rs = up / down #calculate relative strength
             rsi = 100 - (100/(1 + rs)) #calculate relative strength index
             vals.append(rsi)
 
-        self.add_column(heading, vals)
+        return vals
 
     def ppo(self):
         '''
-        Percentage Price Oscillator
+        Returns Percentage Price Oscillator
         '''
-        heading = 'PPO'
         fast = 12
         slow = 26
         vals1 = self.df.ewm(span = fast, adjust=True, min_periods = fast).mean() #Fast length EMA of 12 days
@@ -149,14 +144,13 @@ class Data:
             val = diff / val2 * 100
             vals.append(val)
 
-        self.add_column(heading, vals)
+        return vals
 
 
     def sd(self, n):
         ''' 
         standard deviation indicator with window size n
         '''
-        heading = str(n) + "SD" # column heading
         vals = [] # list of all moving average values
 
         for i in range(n - 1): # populating first n-1 items since values can not be calculated
@@ -172,7 +166,7 @@ class Data:
             
             val = np.std(val_n)
             vals += [val]
-        self.add_column(heading, vals)
+        return vals
 
     def bias(self, n, SMA):
         '''
@@ -180,10 +174,8 @@ class Data:
         '''
 
         if SMA:
-            heading = 'BIAS('+str(n)+'SMA)'
             ma = self.df['Close'].rolling(n).mean()
         else: #EMA
-            heading = 'BIAS('+str(n)+'EMA)'
             ma = self.df['Close'].ewm(span = n, adjust=True, min_periods = n).mean()
 
         ma_list = ma.tolist()
@@ -193,13 +185,12 @@ class Data:
             dev_rate = (val - ma) / ma * 100
             vals.append(dev_rate)
 
-        self.add_column(heading, vals)
+        return vals
 
     def roc(self, n):
         '''
         Rate of Change indicator comparing current price and n days ago
         '''
-        heading = str(n) + "ROC" # column heading
         vals = []
         length = self.df.shape[0] # set length to remaining values to be calculated
         for i in range(length):
@@ -212,16 +203,14 @@ class Data:
 
             vals.append(roc)
 
-        self.add_column(heading, vals)
+        return vals
 
-    def so(self, kn = 0, dn = 0):
+    def sok(self, n):
         '''
-        Stochastic Oscillator with the period n
+        Stochastic Oscillator %K with the period n
         '''
-        heading = str(kn) + "SO"
-        
-        min_vals = self.df.rolling(kn).min() #min value within n days period
-        max_vals = self.df.rolling(kn).max() #max value within n days period
+        min_vals = self.df.rolling(n).min() #min value within n days period
+        max_vals = self.df.rolling(n).max() #max value within n days period
 
         vals = []
         length = self.df.shape[0]
@@ -231,18 +220,16 @@ class Data:
             cur = self.df['Close'].values[i]
             val = (cur - min) / (max - min) * 100
             vals.append(val)
-
-        if (dn == 0): # %K line
-            heading = str(kn) + "K"
-            
-        elif (kn == 0): # %D line
-            vals = []
-        else:
-            heading = str(kn) + "D"
-            vals_series = pd.Series(vals)
-            d = vals_series.rolling(dn).mean()
-            vals = d.tolist()
     
-        self.add_column(heading, vals)
-        
-                
+        return vals
+    
+    def sod(self, kn, dn):
+        '''
+        Stochastic Oscillator %D with the smoothing period dn and span kn
+        '''   
+        k = self.sok(kn)
+        vals_series = pd.Series(k)
+        d = vals_series.rolling(dn).mean()
+        vals = d.tolist()
+
+        return vals
