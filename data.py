@@ -1,5 +1,6 @@
 import yfinance as yf
 import numpy as np
+import pandas as pd
 
 class Data: 
     def __init__(self, stock):
@@ -19,23 +20,29 @@ class Data:
         Poplate data frame with features
         '''
         # self.df['MA'] = self.df.rolling(window=5).mean()
-        # self.sma(5)
-        # self.sma(6)
-        # self.sma(10)
-        # self.sma(20)
-        # self.ema(5)
-        # self.ema(6)
-        # self.ema(10)
-        # self.ema(20)
-        # self.macd()
-        # self.rsi(14, SMA=True)
-        # self.rsi(14, SMA=False)
-        # self.ppo()
-        # self.sd(5)
-        # self.bias(5, SMA=True)
-        # self.bias(5, SMA=False)
-        # self.roc(3)
-
+        self.sma(5)
+        self.sma(6)
+        self.sma(10)
+        self.sma(20)
+        self.ema(5)
+        self.ema(6)
+        self.ema(10)
+        self.ema(20)
+        self.macd() 
+        self.rsi(14, SMA=True) #12
+        self.rsi(14, SMA=False) #12
+        self.ppo()
+        self.sd(5)
+        self.bias(5, SMA=True)
+        self.bias(5, SMA=False)
+        self.bias(10, SMA=True)
+        self.bias(10, SMA=False)
+        self.roc(6)
+        self.roc(10)
+        self.roc(20)
+        self.so(kn=9)
+        self.so(kn=9, dn=3)
+        
         print(self.df)
 
     def sma(self, n):
@@ -173,10 +180,10 @@ class Data:
         '''
 
         if SMA:
-            heading = 'BIAS(SMA)'
+            heading = 'BIAS('+str(n)+'SMA)'
             ma = self.df['Close'].rolling(n).mean()
         else: #EMA
-            heading = 'BIAS(EMA)'
+            heading = 'BIAS('+str(n)+'EMA)'
             ma = self.df['Close'].ewm(span = n, adjust=True, min_periods = n).mean()
 
         ma_list = ma.tolist()
@@ -204,8 +211,38 @@ class Data:
                 roc = (current_val - previous_val) / previous_val * 100
 
             vals.append(roc)
-        print(vals)
 
         self.add_column(heading, vals)
 
+    def so(self, kn = 0, dn = 0):
+        '''
+        Stochastic Oscillator with the period n
+        '''
+        heading = str(kn) + "SO"
+        
+        min_vals = self.df.rolling(kn).min() #min value within n days period
+        max_vals = self.df.rolling(kn).max() #max value within n days period
+
+        vals = []
+        length = self.df.shape[0]
+        for i in range(length): # for every value in list
+            min = min_vals['Close'].values[i]
+            max = max_vals['Close'].values[i]
+            cur = self.df['Close'].values[i]
+            val = (cur - min) / (max - min) * 100
+            vals.append(val)
+
+        if (dn == 0): # %K line
+            heading = str(kn) + "K"
+            
+        elif (kn == 0): # %D line
+            vals = []
+        else:
+            heading = str(kn) + "D"
+            vals_series = pd.Series(vals)
+            d = vals_series.rolling(dn).mean()
+            vals = d.tolist()
+    
+        self.add_column(heading, vals)
+        
                 
