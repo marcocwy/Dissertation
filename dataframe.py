@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-class Data: 
+class Dataframe: 
     def __init__(self, df):        
         self.df = df
         pd.options.mode.chained_assignment = None # default='warn', turn off chain assignment warning
