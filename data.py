@@ -4,6 +4,7 @@ import pandas as pd
 class Data: 
     def __init__(self, df):        
         self.df = df
+        pd.options.mode.chained_assignment = None # default='warn', turn off chain assignment warning
 
     def add_column(self, heading, values):
         '''
@@ -40,7 +41,7 @@ class Data:
         self.add_column("9K"          ,self.sok(9))
         self.add_column("9D"          ,self.sod(9, 3))
         
-        print(self.df)
+        return self.df
 
     def sma(self, n):
         ''' 

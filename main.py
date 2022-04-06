@@ -15,7 +15,8 @@ class Main:
         ticker = yf.Ticker("MSFT").history(period="max")
         closing = ticker[['Close']]
         msft = data.Data(closing)
-        msft.populate_data_frame()
+        msft = msft.populate_data_frame()
+        print(msft)
 
         # #preprocess file
         # normalised = Pre_processing.normalisation(self.file)
