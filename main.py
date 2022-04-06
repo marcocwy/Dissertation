@@ -2,16 +2,19 @@ import pre_processing
 import dimensionality_reduction
 import ml_algorithms
 import evaluation
-import data
+import data 
 
 import pandas as pd
+import yfinance as yf
 
 class Main:
     
     def __init__(self):
         # self.file = pd.read_csv(file, sep='\t')
 
-        msft = data.Data("MSFT")
+        ticker = yf.Ticker("MSFT").history(period="max")
+        closing = ticker[['Close']]
+        msft = data.Data(closing)
         msft.populate_data_frame()
 
         # #preprocess file

@@ -1,13 +1,9 @@
-import yfinance as yf
 import numpy as np
 import pandas as pd
 
 class Data: 
-    def __init__(self, stock):
-        data = yf.Ticker(stock)
-        hist = data.history(period="max") # get historical market data
-        
-        self.df = hist[['Close']] # Extract close
+    def __init__(self, df):        
+        self.df = df
 
     def add_column(self, heading, values):
         '''
