@@ -3,12 +3,14 @@ import math
 
 class Pre_processing:
 
-    def __init__(self, file):
-        self.file = file
+    def __init__(self, df):
+        self.df = df
 
-    def normalisation(file):
-        normalised = []
-        return normalised
+    def normalisation():
+        headings = list(my_dataframe.columns.values)
+
+        df[cols] = df[cols] / df[cols].sum()
+        
 
     def savitzky_golay(file):
         filtered = []
