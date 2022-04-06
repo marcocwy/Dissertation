@@ -14,19 +14,22 @@ class Main:
 
         ticker = yf.Ticker("MSFT").history(period="max") #retrieving all historical market data
         closing = ticker[['Close']] # extracting closing market value for the stock
-        data = dataframe.Dataframe(closing) # creating 
-        msft = data.populate_data_frame()
+        df = dataframe.Dataframe(closing) # creating 
+        msft = df.populate_data_frame()
         # print(msft)
 
         # #preprocess file
         pp = pre_processing.Pre_processing(msft)
+        cleaned = pp.clean_df()
+        print(cleaned)
         # normalised = pp.normalisation()
         # print(normalised)
         savitzky_golay = pp.savitzky_golay(5, 2)
-        print(savitzky_golay)
+        # print(savitzky_golay)
         
         # #dimensionality reduction
-        # pca = Dimensionality_reduction.pca(x, 10)
+        # dr = dimensionality_reduction.Dimensionality_reduction(msft)
+        # pca = dr.pca(10)
         # kpca = Dimensionality_reduction.kpca(x, 10)
         
         # #Training
