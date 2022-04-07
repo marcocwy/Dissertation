@@ -10,7 +10,7 @@ class Pre_processing:
 
     def clean_df(self):
         cleaned = self.df
-        # cleaned['Date'] = cleaned.index
+        cleaned['Date'] = cleaned.index
         # cleaned.dropna(inplace=True)
         # cleaned.reset_index(drop=True, inplace=True)
         
@@ -18,9 +18,15 @@ class Pre_processing:
         # self.df = cleaned
         # print(self.df)
 
-        # for row in cleaned.index:
+        # for i in range(self.df.shape[0]):
             
-        # return cleaned
+        #     if cleaned.iloc[[i]].isnull().values.any():
+        #         print(cleaned.index[[i]][0])
+        #         cleaned = cleaned.drop(cleaned.index[[i]],inplace=True))
+        #         cleaned = cleaned.loc[cleaned['Date'] == cleaned['Date'].values[i] ]
+
+            
+        return cleaned
 
     def normalisation(self): #put values between 0 and 1
 
