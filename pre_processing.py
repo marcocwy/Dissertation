@@ -9,36 +9,22 @@ class Pre_processing:
         self.headings.pop(0) #removing first item in list, which is closing, as it does not need to be normalised
 
     def clean_df(self):
-        cleaned = self.df
-        cleaned['Date'] = cleaned.index
-        # cleaned.dropna(inplace=True)
-        # cleaned.reset_index(drop=True, inplace=True)
-        
-        # # cleaned.set_index('Date',  inplace=True)
-        # self.df = cleaned
-        # print(self.df)
-        nan = []
+
+        contain_nan = []
         for i in range(self.df.shape[0]):
-            
-            if cleaned.iloc[[i]].isnull().values.any():
-                # print(cleaned.index[[i]][0])
-                nan += [i]
-                # cleaned = cleaned.drop(cleaned.index[[i]][0],inplace=True)
-        #         cleaned = cleaned.loc[cleaned['Date'] == cleaned['Date'].values[i] ]
-        print(nan)
+            if self.df.iloc[[i]].isnull().values.any():
+                contain_nan += [i]
+        # print(contain_nan)
         
-        cleaned.drop(cleaned.index[nan], inplace=True)
-        # for i in nan:
-        #     cleaned.drop(cleaned.index[[i]][0],inplace=True)
-        #     print(i)
-        return cleaned
+        self.df.drop(self.df.index[contain_nan], inplace=True)
+
+        return self.df
 
     def normalisation(self): #put values between 0 and 1
 
         for col in self.headings:
             self.df[col] = self.df[col] / self.df[col].sum()
         
-        return self.df
         
 
     def savitzky_golay(self, n, order):  # n:odd, >=3, order <= n - 2
@@ -47,5 +33,4 @@ class Pre_processing:
             vals = self.df[col].tolist()
             savgol = s.savgol_filter(vals, n, order).tolist()
             self.df[col] = savgol
-        return self.df
 
