@@ -9,28 +9,30 @@ import yfinance as yf
 
 class Main:
     
-    def __init__(self):
+    def __init__(self, stock_name, normalisation=False, savgol=False):
         # self.file = pd.read_csv(file, sep='\t')
 
-        ticker = yf.Ticker("MSFT").history(period="max") #retrieving all historical market data
+        ticker = yf.Ticker(stock_name).history(period="max") #retrieving all historical market data
         closing = ticker[['Close']] # extracting closing market value for the stock
 
         df = dataframe.Dataframe(closing) # creating 
         df.populate_data_frame()
-        msft = df.df
+        stock = df.df
         # print(msft)
 
         # #preprocess file
-        pp = pre_processing.Pre_processing(msft)
+        pp = pre_processing.Pre_processing(stock)
 
         pp.clean_df()
         # print(pp.df)
 
-        pp.normalisation()
+        if normalisation:
+            pp.normalisation()
         # print(pp.df)
 
-        pp.savitzky_golay(5, 2)
-        # print(pp.df)
+        if savgol:
+            pp.savitzky_golay(5, 2)
+        print(pp.df)
         
         # #dimensionality reduction
         # dr = dimensionality_reduction.Dimensionality_reduction(msft)
@@ -48,4 +50,4 @@ class Main:
         # #evaluation
         # Evaluation.mae()
 
-Main()
+Main("MSFT", normalisation=False, savgol=True)
