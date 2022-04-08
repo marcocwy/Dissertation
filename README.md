@@ -17,18 +17,17 @@ Features implemented:
     -   K (Stochastic Oscillator %K)
     -   D (Stochastic Oscillator %D)
 -   Preprocessing techniques:
+    -   Cleaning database
     -   Normalisation
     -   Savitzky golay smoothing 
-
-Features currently working on:
--   Preprocessing techniques:
-    -   cleaning database
 -   Dimensionality reduction technique:
     -   PCA (Principal Component Analysis)
 
-Features yet to implement:
+Features currently working on:
 -   Dimensionality reduction techniques:
     -   KPCA (Kernal Principal Component Analysis)
+
+Features yet to implement:
 -   Machine Learning algorithms:
     -   SVR (Support Vector Regression)
     -   KNN (K nearest Neighbour)
