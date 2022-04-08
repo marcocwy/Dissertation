@@ -25,7 +25,7 @@ Features implemented:
 
 Features currently working on:
 -   Dimensionality reduction techniques:
-    -   KPCA (Kernal Principal Component Analysis)
+    -   KPCA (Kernel Principal Component Analysis)
 
 Features yet to implement:
 -   Machine Learning algorithms:
