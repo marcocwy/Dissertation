@@ -17,15 +17,20 @@ class Pre_processing:
         # # cleaned.set_index('Date',  inplace=True)
         # self.df = cleaned
         # print(self.df)
-
-        # for i in range(self.df.shape[0]):
+        nan = []
+        for i in range(self.df.shape[0]):
             
-        #     if cleaned.iloc[[i]].isnull().values.any():
-        #         print(cleaned.index[[i]][0])
-        #         cleaned = cleaned.drop(cleaned.index[[i]],inplace=True))
+            if cleaned.iloc[[i]].isnull().values.any():
+                # print(cleaned.index[[i]][0])
+                nan += [i]
+                # cleaned = cleaned.drop(cleaned.index[[i]][0],inplace=True)
         #         cleaned = cleaned.loc[cleaned['Date'] == cleaned['Date'].values[i] ]
-
-            
+        print(nan)
+        
+        cleaned.drop(cleaned.index[nan], inplace=True)
+        # for i in nan:
+        #     cleaned.drop(cleaned.index[[i]][0],inplace=True)
+        #     print(i)
         return cleaned
 
     def normalisation(self): #put values between 0 and 1
