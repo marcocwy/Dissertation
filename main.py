@@ -48,6 +48,7 @@ class Main:
 
         if PCA > 0:
             dr.pca(PCA)
+            # dr.skpca(PCA)
         print(dr.df)
 
         # kpca = Dimensionality_reduction.kpca(x, 10)

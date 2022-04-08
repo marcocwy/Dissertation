@@ -1,10 +1,31 @@
 import numpy as np
 import pandas as pd
+# from sklearn.decomposition import PCA
 
 class Dimensionality_reduction: 
 
     def __init__(self, df):
         self.df = df
+
+    # def skpca(self, n):
+    #     target = pd.DataFrame(self.df['Close'])
+    #     X = self.df
+    #     pca = PCA(n_components=n)
+    #     pca.fit(X)
+    #     X = pca.transform(X)
+    #     # print(X)
+
+    #     headings = []
+    #     for i in range(n):
+    #         heading = "PC" + str(i+1)
+    #         headings += [heading]
+    #     # print(headings)
+    #     pc_vals = pd.DataFrame(X, index = target.index ,columns = headings)
+    #     # print(pc_vals)
+
+    #     pc_df = pd.concat([target, pc_vals] , axis = 1)
+    #     print(pc_df)
+
 
     def pca(self, n):
         print("Applying PCA to data frame...")
@@ -18,33 +39,41 @@ class Dimensionality_reduction:
         
         #calculating covariance matrix, eigen matrix and eigen vectors
         cov_mat = np.cov(df_centered, rowvar = False)
-        eigen_values, eigen_vectors = np.linalg.eigh(cov_mat)
+        eig_vals, eig_vecs = np.linalg.eigh(cov_mat)
         
         #sorting eigenvalues in descending order
-        sorted_index = np.argsort(eigen_values)[::-1]
-        sorted_eigenvalue = eigen_values[sorted_index]
-        sorted_eigenvectors = eigen_vectors[:,sorted_index]
+        sorted_i = np.argsort(eig_vals)[::-1]
+        sorted_eig_vals = eig_vals[sorted_i]
+        sorted_eig_vecs = eig_vecs[:,sorted_i]
         
         #selecting the first n components
-        n_eigenvectors = sorted_eigenvectors[:,0:n]
+        n_eig_vecs = sorted_eig_vecs[:,:n]
         
         # #transforming data to new labels
-        data_set_transformed = np.dot(n_eigenvectors.transpose(), df_centered.transpose()).transpose()
-        
+        data_set_transformed = np.dot(n_eig_vecs.transpose(), df_centered.transpose()).transpose()
         # print(data_set_transformed)
+
         headings = []
         for i in range(n):
+            #creating a list of headings in data frame
             heading = "PC" + str(i+1)
-            headings += [heading]
-        # print(headings)
+            headings += [heading] 
+
+            #printing the explained variance by each component
+            perc = sorted_eig_vals[i] / np.sum(sorted_eig_vals)
+            msg = heading + " accounts for " +str(perc)+ "% of the variance in the data"
+            print(msg)
+
         pc_vals = pd.DataFrame(data_set_transformed, index = target.index ,columns = headings)
-        # print(principal_df)
+        # print(pc_vals)
 
         pc_df = pd.concat([target, pc_vals] , axis = 1)
         # print(pc_df)
 
         self.df = pc_df
+        # print(self.df)
 
     def kpca(data_set, n):
         data_set_transformed = data_set
+        
         return data_set_transformed

@@ -1,32 +1,26 @@
-from collections import namedtuple
-from operator    import itemgetter
+def pca2(self, n):
+        print("Applying PCA to data frame...")
+        df = self.df.drop(columns=['Close'])
 
-def smooth(iq_data, alpha=1, today=None):
-    """Perform exponential smoothing with factor `alpha`.
+        target = pd.DataFrame(self.df['Close'])
 
-    Time period is a day.
-    Each time period the value of `iq` drops `alpha` times.
-    The most recent data is the most valuable one.
-    """
-    assert 0 < alpha <= 1
 
-    if alpha == 1: # no smoothing
-        return sum(map(itemgetter(1), iq_data))
-
-    if today is None:
-        today = max(map(itemgetter(0), iq_data))
-
-    return sum(alpha**((today - date).days) * iq for date, iq in iq_data)
-
-IQData = namedtuple("IQData", "date iq")
-
-if __name__ == "__main__":
-    from datetime import date
-
-    days = [date(2008,1,1), date(2008,1,2), date(2008,1,3), date(2008,1,4)]
-    IQ = [110, 105, 90, 95, 97]
-    iqdata = list(map(IQData, days, IQ))
-    print("\n".join(map(str, iqdata)))
-
-    print(iqdata) #list
-    print(smooth(iqdata, alpha=0.5))
+        #centering
+        df_centered = df - np.mean(df, axis = 0).T # mean:0, devi:1
+        
+        #calculating covariance matrix, eigen matrix and eigen vectors
+        cov_mat = np.cov(df_centered, rowvar = False)
+        eigen_values, eigen_vectors = np.linalg.eigh(cov_mat)
+        
+        #sorting eigenvalues in descending order
+        sorted_index = np.argsort(eigen_values)[::-1]
+        sorted_eigenvalue = eigen_values[sorted_index]
+        sorted_eigenvectors = eigen_vectors[:,sorted_index]
+        
+        #selecting the first n components
+        n_eigenvectors = sorted_eigenvectors[:,0:n]
+        
+        # #transforming data to new labels
+        data_set_transformed = np.dot(n_eigenvectors.transpose(), df_centered.transpose()).transpose()
+        
+        print(data_set_transformed)
