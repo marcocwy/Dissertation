@@ -17,6 +17,7 @@ class Dataframe:
         Poplate data frame with features
         '''
         # self.df['MA'] = self.df.rolling(window=5).mean()
+        print('Populating data frame...')
         self.add_column("5SMA"        ,self.sma(5))
         self.add_column("6SMA"        ,self.sma(6))
         self.add_column("10SMA"       ,self.sma(10))

@@ -7,7 +7,7 @@ class Dimensionality_reduction:
         self.df = df
 
     def pca(self, n):
-        
+        print("Applying PCA to data frame...")
         df = self.df.drop(columns=['Close'])
 
         target = pd.DataFrame(self.df['Close'])
