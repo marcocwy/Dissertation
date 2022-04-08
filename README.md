@@ -2,6 +2,11 @@
 Maching Learning with high dimensional data with stocks data
 
 python main.py # to run script
+Toggle features in Main():
+    stock_name       :String        # Name of stock
+    normalisation    :Boolean       # default=False
+    savgol           :Boolean       # default=False
+    PCA              :INT > 0       # default=0 (Not activated), Positive number of principle components
 
 Features implemented:
 -   Collect data from yFinance
@@ -19,7 +24,7 @@ Features implemented:
 -   Preprocessing techniques:
     -   Cleaning database
     -   Normalisation
-    -   Savitzky golay smoothing 
+    -   Savitzky Golay smoothing 
 -   Dimensionality reduction technique:
     -   PCA (Principal Component Analysis)
 
@@ -28,10 +33,10 @@ Features currently working on:
     -   KPCA (Kernel Principal Component Analysis)
 
 Features yet to implement:
--   Machine Learning algorithms:
+-   Machine learning algorithms:
     -   SVR (Support Vector Regression)
-    -   KNN (K nearest Neighbour)
--   Evaluation Techniques:
+    -   KNN (K Nearest Neighbour)
+-   Evaluation techniques:
     -   MAE (Mean Average Error)
-    -   RMSE (Root Mean square Error)
+    -   RMSE (Root Mean Square Error)
     -   R (R-Squared)
