@@ -29,12 +29,13 @@ Features implemented:
     -   PCA (Principal Component Analysis)
 
 Features currently working on:
--   Dimensionality reduction techniques:
-    -   KPCA (Kernel Principal Component Analysis)
-
-Features yet to implement:
 -   Machine learning algorithms:
     -   SVR (Support Vector Regression)
+
+Features yet to implement:
+-   Dimensionality reduction techniques:
+    -   KPCA (Kernel Principal Component Analysis)
+-   Machine learning algorithms:
     -   KNN (K Nearest Neighbour)
 -   Evaluation techniques:
     -   MAE (Mean Average Error)

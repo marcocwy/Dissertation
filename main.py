@@ -14,8 +14,9 @@ class Main:
         ############################## Getting Historical data ##############################
         
         # self.file = pd.read_csv(file, sep='\t')
-        ticker = yf.Ticker(stock_name).history(start="2000-01-01", end="2002-01-01") #retrieving all historical market data
+        ticker = yf.Ticker(stock_name).history(start="2021-01-01", end="2022-01-01") #retrieving all historical market data
         self.df = ticker[['Close']] # extracting closing market value for the stock
+        # print(self.df)
 
         ############################## Populating dataframe ##############################
 
@@ -49,13 +50,14 @@ class Main:
         if PCA > 0:
             dr.pca(PCA)
             # dr.skpca(PCA)
-        print(dr.df)
+        # print(dr.df)
         self.df = dr.df
         # kpca = Dimensionality_reduction.kpca(x, 10)
         
         ############################## Machine Learning ##############################
 
         ml_model = ml_algorithms.Ml_algorithms(self.df)
+        ml_model.adj_df()
         ml_model.svr()
         # knn_model = Ml_algorithms.knn(file)
 
@@ -66,4 +68,4 @@ class Main:
         # #evaluation
         # Evaluation.mae()
 
-Main("MSFT", normalisation=False, savgol=True, PCA=10)
+Main("MSFT", normalisation=True, savgol=False, PCA=0)

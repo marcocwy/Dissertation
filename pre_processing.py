@@ -17,7 +17,7 @@ class Pre_processing:
         # print(contain_nan)
         
         self.df.drop(self.df.index[contain_nan], inplace=True)
-
+        # print(self.df)
         return self.df
 
     def normalisation(self): #put values between 0 and 1
