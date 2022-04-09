@@ -29,14 +29,16 @@ Features implemented:
     -   PCA (Principal Component Analysis)
 
 Features currently working on:
--   Machine learning algorithms:
+-   Machine learning algorithms: 
+    # Both currently working, need to implement so that both will do rolling windows
     -   SVR (Support Vector Regression)
+    -   KNN (K Nearest Neighbour)
 
 Features yet to implement:
 -   Dimensionality reduction techniques:
     -   KPCA (Kernel Principal Component Analysis)
 -   Machine learning algorithms:
-    -   KNN (K Nearest Neighbour)
+    -   More potentially?
 -   Evaluation techniques:
     -   MAE (Mean Average Error)
     -   RMSE (Root Mean Square Error)

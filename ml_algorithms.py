@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
-
+from sklearn.neighbors import KNeighborsRegressor as KNR
 import pre_processing
 
 class Ml_algorithms: 
@@ -21,12 +21,7 @@ class Ml_algorithms:
         pp.clean_df()
         self.df = pp.df
 
-    def svr(self):
-        print("Machine learning with SVR...")
-        # dates = self.df.index
-        # dates = dates.strftime('%Y%m%d').tolist()
-        # dates = np.reshape(dates,(len(dates), 1))
-        # print(dates)
+    def get_data(self):
         df_data = self.df.drop('Close', axis=1)
         data = []
         for i in range(df_data.shape[0]):
@@ -35,32 +30,43 @@ class Ml_algorithms:
 
         # print(data)
 
-        # x = [20020101]
-        # x = np.reshape(x,(len(x), 1))
-        # print(x)
         prices = self.df['Close'].tolist()
         # print(prices)
+        return data, prices
+
+    def svr(self):
+        print("Machine learning with SVR...")
+
+        data, prices = self.get_data()
+
         # # svr_lin  = SVR(kernel='linear', C=1e3)
         # # svr_poly = SVR(kernel='poly', C=1e3, degree=2)
         svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.1)
 
         svr_rbf.fit(data, prices)
-        # print(self.test)
+
         predicted = svr_rbf.predict([self.test])
 
         print("Predicted value: " + str(predicted[0]))
         print("Actual value: " + str(self.target))
-
+        per_error = abs(self.target-predicted[0])/predicted[0] * 100
+        print("Percentage Error: " + str(per_error) + "%")
 
         # return null
 
-    def knn(n=3):
-        model = KNeighborsClassifier(n)
+    def knr(self, n=3):
 
-        # Train the model using the training sets
-        # model.fit(self.data, self.label)
+        print("Machine learning with KNR...")
 
-        #Predict Output
-        predicted = model.predict([[0,2]]) # 0:Overcast, 2:Mild
+        data, prices = self.get_data()
+        
+        model = KNR(n)
 
-        return predicted
+        model.fit(data, prices)
+        # print(self.test)
+        predicted = model.predict([self.test])
+
+        print("Predicted value: " + str(predicted[0]))
+        print("Actual value: " + str(self.target))
+        per_error = abs(self.target-predicted[0])/predicted[0] * 100
+        print("Percentage Error: " + str(per_error) + "%")
