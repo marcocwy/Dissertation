@@ -28,6 +28,14 @@ class Dimensionality_reduction:
 
 
     def pca(self, n):
+        '''
+        Principle component analysis to reduce dimensions
+        ---------- Params ---------- 
+        n: int
+            Number of principal components to return    
+        ---------- Returns ---------- 
+        void, function transforms self.df
+        '''
         print("Applying PCA to data frame...")
         df = self.df.drop(columns=['Close'])
 
