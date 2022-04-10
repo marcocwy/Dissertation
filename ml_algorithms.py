@@ -9,11 +9,9 @@ class Ml_algorithms:
         self.df = df
         # self.label = []
         self.test = []
-        self.target = 0
 
     def adj_df(self):
         self.test = self.df.iloc[-1].tolist()
-        self.target = self.test[0]
         self.test.pop(0)
 
         self.df = self.df.shift(periods=1) 
@@ -35,28 +33,28 @@ class Ml_algorithms:
         return data, prices
 
     def svr(self):
-        print("Machine learning with SVR...")
+        # print("Machine learning with SVR...")
 
         data, prices = self.get_data()
 
-        # # svr_lin  = SVR(kernel='linear', C=1e3)
-        # # svr_poly = SVR(kernel='poly', C=1e3, degree=2)
-        svr_rbf = SVR(kernel='rbf', C=1e3, gamma=0.1)
+        # # lin_model  = SVR(kernel='linear', C=1e3)
+        # # poly_model = SVR(kernel='poly', C=1e3, degree=2)
+        rbf_model = SVR(kernel='rbf', C=1e3, gamma=0.1)
 
-        svr_rbf.fit(data, prices)
+        rbf_model.fit(data, prices)
 
-        predicted = svr_rbf.predict([self.test])
+        predicted = rbf_model.predict([self.test])[0]
 
-        print("Predicted value: " + str(predicted[0]))
-        print("Actual value: " + str(self.target))
-        per_error = abs(self.target-predicted[0])/predicted[0] * 100
-        print("Percentage Error: " + str(per_error) + "%")
+        # print("Predicted value: " + str(predicted))
+        # print("Actual value: " + str(self.target))
+        # per_error = abs(self.target-predicted)/predicted * 100
+        # print("Percentage Error: " + str(per_error) + "%")
 
-        # return null
+        return predicted
 
     def knr(self, n=3):
 
-        print("Machine learning with KNR...")
+        # print("Machine learning with KNR...")
 
         data, prices = self.get_data()
         
@@ -66,7 +64,7 @@ class Ml_algorithms:
         # print(self.test)
         predicted = model.predict([self.test])
 
-        print("Predicted value: " + str(predicted[0]))
-        print("Actual value: " + str(self.target))
+        print("Predicted value: $" + str(predicted[0]))
+        print("Actual value: $" + str(self.target))
         per_error = abs(self.target-predicted[0])/predicted[0] * 100
         print("Percentage Error: " + str(per_error) + "%")
