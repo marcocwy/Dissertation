@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-class Dataframe: 
+class Features: 
     def __init__(self, df):        
         self.df = df
         pd.options.mode.chained_assignment = None # default='warn', turn off chain assignment warning
@@ -17,7 +17,7 @@ class Dataframe:
         Poplate data frame with features
         '''
         # self.df['MA'] = self.df.rolling(window=5).mean()
-        print('Populating data frame...')
+        # print('Populating data frame...')
         self.add_column("5SMA"        ,self.sma(5))
         self.add_column("6SMA"        ,self.sma(6))
         self.add_column("10SMA"       ,self.sma(10))
