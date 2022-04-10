@@ -38,7 +38,7 @@ class Dimensionality_reduction:
         ---------- Returns ---------- 
         void, function transforms self.df
         '''
-        print("Applying PCA to data frame...")
+        # print("Applying PCA to data frame...")
         df = self.df.drop(columns=['Close'])
 
         target = pd.DataFrame(self.df['Close'])
@@ -70,9 +70,9 @@ class Dimensionality_reduction:
             headings += [heading] 
 
             #printing the explained variance by each component
-            perc = sorted_eig_vals[i] / np.sum(sorted_eig_vals)
-            msg = heading + " accounts for " +str(perc)+ "% of the variance in the data"
-            print(msg)
+            # perc = sorted_eig_vals[i] / np.sum(sorted_eig_vals)
+            # msg = heading + " accounts for " +str(perc)+ "% of the variance in the data"
+            # print(msg)
 
         pc_vals = pd.DataFrame(data_set_transformed, index = target.index ,columns = headings)
         # print(pc_vals)
@@ -121,9 +121,9 @@ class Dimensionality_reduction:
             headings += [heading] 
 
             #printing the explained variance by each component
-            perc = sorted_eig_vals[i] / np.sum(sorted_eig_vals)
-            msg = heading + " accounts for " +str(perc)+ "% of the variance in the data"
-            print(msg)
+            # perc = sorted_eig_vals[i] / np.sum(sorted_eig_vals)
+            # msg = heading + " accounts for " +str(perc)+ "% of the variance in the data"
+            # print(msg)
 
         pc_vals = pd.DataFrame(data_set_transformed, index = target.index ,columns = headings)
         # print(pc_vals)
