@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 # from sklearn.decomposition import PCA
 
+import scipy as sp
+
 class Dimensionality_reduction: 
 
     def __init__(self, df):
@@ -81,7 +83,59 @@ class Dimensionality_reduction:
         self.df = pc_df
         # print(self.df)
 
-    def kpca(data_set, n):
-        data_set_transformed = data_set
+    def kpca(self, n):
         
-        return data_set_transformed
+        df = self.df.drop(columns=['Close'])
+        target = pd.DataFrame(self.df['Close'])
+
+        gamma = 15 #fload
+
+        # Calculate pairwise squared Euclidean distances
+        # in the MxN dimensional dataset.
+        sq_dists = sp.spatial.distance.pdist(df, 'sqeuclidean')
+        # print(sq_dists)
+
+        # Convert pairwise distances into a square matrix.
+        mat_sq_dists = sp.spatial.distance.squareform(sq_dists)    
+        # Compute the symmetric kernel matrix.
+        K = sp.exp(-gamma * mat_sq_dists)
+
+        # Center the kernel matrix.
+        N = K.shape[0]
+        one_n = np.ones((N,N)) / N
+        K = K - one_n.dot(K) - K.dot(one_n) + one_n.dot(K).dot(one_n)
+
+        # Obtaining eigenpairs from the centered kernel matrix
+        # scipy.linalg.eigh returns them in ascending order
+        eigvals, eigvecs = np.linalg.eigh(K)
+        sorted_eig_vals = eigvals[::-1]
+        sorted_eig_vecs = eigvecs[:, ::-1]
+
+        # Collect the top k eigenvectors (projected examples)
+        data_set_transformed = np.column_stack([sorted_eig_vecs[:, i] for i in range(n)])    
+
+        headings = []
+        for i in range(n):
+            #creating a list of headings in data frame
+            heading = "KPC" + str(i+1)
+            headings += [heading] 
+
+            #printing the explained variance by each component
+            perc = sorted_eig_vals[i] / np.sum(sorted_eig_vals)
+            msg = heading + " accounts for " +str(perc)+ "% of the variance in the data"
+            print(msg)
+
+        pc_vals = pd.DataFrame(data_set_transformed, index = target.index ,columns = headings)
+        # print(pc_vals)
+
+        pc_df = pd.concat([target, pc_vals] , axis = 1)
+        # print(pc_df)
+
+        self.df = pc_df
+        # print(self.df)
+        
+        # return X_pc
+
+        # data_set_transformed = data_set
+        
+        # return data_set_transformed

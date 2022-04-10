@@ -41,7 +41,7 @@ class Main:
         # print(pp.df)
 
         self.df = pp.df
-        # print(self.df)
+        print(self.df)
         
         ############################## Dimensionality Reduction ##############################
 
@@ -50,6 +50,7 @@ class Main:
         if PCA > 0:
             dr.pca(PCA)
             # dr.skpca(PCA)
+            # dr.kpca(PCA)
         
         self.df = dr.df
         # print(self.df)
