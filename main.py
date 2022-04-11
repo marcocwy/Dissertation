@@ -17,12 +17,18 @@ class Main:
         end = "2021-03-03"
 
         self.df , self.pred = self.get_historical_data(stock_name, start, end, T)
-        # self.org = self.get_historical_data(stock_name, start, end, T)[0]
 
-        # print(self.df)
-        # print(self.pred)
+        pred_vals = self.predict_period(normalisation, savgol, PCA, KPCA, SVR, KNR, T)
 
-        self.predict_period(normalisation, savgol, PCA, KPCA, SVR, KNR, T)
+        e = evaluation.Evaluation(pred_vals)
+        mae = e.mae()
+        # print(mae)
+        
+        rmse = e.rmse()
+        # print(rmse)
+
+        r = e.r()
+        # print(r)
 
 
         
@@ -105,27 +111,21 @@ class Main:
     def predict_period(self, normalisation, savgol, PCA, KPCA, SVR, KNR, T):
         
         predicted = self.predict(self.df, normalisation, savgol, PCA, KPCA, SVR, KNR)
-        print (predicted, self.pred['Close'][0])
-        # print(self.df)
+
+        pred_vals = [(predicted, self.pred['Close'][0])]
 
         temp_df = self.pred.copy(deep=True)
         new_df = self.df.copy(deep=True)
 
-        # temp_df = self.pred.iloc[0].to_frame().transpose()
-        # temp_df = temp_df.assign(Close=predicted)
-        # new_df = new_df.append(temp_df)
-        # predicted, target = self.predict(normalisation, savgol, PCA, KPCA, SVR, KNR)
-        # print (predicted, target)
-        # print(new_df)
         for i in range(T-1):
             temp_df = self.pred.iloc[i].to_frame().transpose()
             temp_df = temp_df.assign(Close=predicted)
             new_df = new_df.append(temp_df)
             predicted = self.predict(new_df, normalisation, savgol, PCA, KPCA, SVR, KNR)
-            print (predicted, self.pred['Close'][i+1])
+            pred_vals += [(predicted, self.pred['Close'][i+1])]
+        
+        print(pred_vals)
 
-        print(new_df) #last set of data not added
-        print(self.pred)
-        print(self.df)
+        return pred_vals
 
 Main("MSFT", normalisation=True, savgol=False, PCA=10, T=5)

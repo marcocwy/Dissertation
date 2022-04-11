@@ -3,18 +3,42 @@ import math
 
 class Evaluation:
 
-    def __init__(self, pred, true):
+    def __init__(self, pred):
         self.pred = pred
-        self.true = true
 
     def mae(self):
-        mae = sk.mean_absolute_error(self.true, self.pred)
+        n = len(self.pred)
+        sae = 0   #sum absolute errors
+        for pair in self.pred:
+            ae = abs(pair[0] - pair[1]) # absolute errors
+            
+        mae = sae / n
         return mae
 
     def rmse(self):
-        rmse = math.sqrt(sk.metrics.mean_squared_error(self.true, self.pred))
+        n = len(self.pred)
+        sase = 0   #sum absolute squared errors
+        for pair in self.pred:
+            ase = (pair[0] - pair[1])**2 # absolute squared errors 
+            sase += ase
+
+        rmse = math.sqrt(sase / n)
         return rmse
 
     def r(self):
-        r2 = r2_score(self.true, self.pred)
-        return r2
+        n = len(self.pred)
+        sxy, sx, sy, sxs, sys = 0, 0, 0, 0, 0
+        for pair in self.pred:
+            x = pair[0]
+            y = pair[1]
+
+            sxy += x * y
+            sx  += x
+            sy  += y
+            sxs += x**2
+            sys += y**2
+
+        ssr = (n * sxy) - (sx * sy)   #sum squared regression
+        sst = math.sqrt((n * sxs) - sx**2) * math.sqrt((n * sys) - sy**2)   #total sum of suares
+        rmse = (ssr / sst)**2
+        return rmse
