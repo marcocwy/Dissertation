@@ -11,7 +11,7 @@ class Evaluation:
         sae = 0   #sum absolute errors
         for pair in self.pred:
             ae = abs(pair[0] - pair[1]) # absolute errors
-            
+            sae += ae
         mae = sae / n
         return mae
 
