@@ -12,34 +12,35 @@ Features implemented:
 -   Collect data from yFinance
 -   Populate database with indices:
     -   SMA (Simple Moving Average)
-    -   EMA (Exponential Moving Average)
-    -   MACD (Moving Average Convergence Divergence)
-    -   RSI (Relative Strength Index)
-    -   PPO (Percentage Price Oscillator)
+    -   EMA (Exponential Moving Average)                     Library used
+    -   MACD (Moving Average Convergence Divergence)         Library used (EMA)
+    -   RSI (Relative Strength Index)                        Library used (SMA, EMA)
+    -   PPO (Percentage Price Oscillator)                    Library used (EMA)
     -   SD (Standard Deviation)
-    -   BIAS (Deviation rate)
+    -   BIAS (Deviation rate)                                Library used (SMA, EMA)
     -   ROC (Rate of Change)
     -   K (Stochastic Oscillator %K)
     -   D (Stochastic Oscillator %D)
 -   Preprocessing techniques:
     -   Cleaning database
     -   Normalisation
-    -   Savitzky Golay smoothing 
+    -   Savitzky Golay smoothing                             Library used (Scipy)
 -   Dimensionality reduction technique:
-    -   PCA (Principal Component Analysis)
-
-Features currently working on:
+    -   PCA (Principal Component Analysis)                   change code
+    -   KPCA (Kernel Principal Component Analysis)           change code
 -   Machine learning algorithms: 
-    # Both currently working, need to implement so that both will do rolling windows
-    -   SVR (Support Vector Regression)
-    -   KNN (K Nearest Neighbour)
-
-Features yet to implement:
--   Dimensionality reduction techniques:
-    -   KPCA (Kernel Principal Component Analysis)
--   Machine learning algorithms:
-    -   More potentially?
+    -   SVR (Support Vector Regression)                      change code
+    -   KNN (K Nearest Neighbour)                            change code
 -   Evaluation techniques:
     -   MAE (Mean Average Error)
     -   RMSE (Root Mean Square Error)
     -   R (R-Squared)
+
+Features currently working on:
+
+
+Features yet to implement:
+-   Machine learning algorithms:
+    -   More potentially?
+-   Commenting code / functions
+-   Dissertation write up
