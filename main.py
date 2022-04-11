@@ -18,18 +18,10 @@ class Main:
 
         self.df , self.pred = self.get_historical_data(stock_name, start, end, T)
 
+        print('Predicting next '+str(T)+ ' days of '+stock_name+' market close price...')
         pred_vals = self.predict_period(normalisation, savgol, PCA, KPCA, SVR, KNR, T)
 
-        e = evaluation.Evaluation(pred_vals)
-        mae = e.mae()
-        # print(mae)
-        
-        rmse = e.rmse()
-        # print(rmse)
-
-        r = e.r()
-        # print(r)
-
+        self.show_results(pred_vals)
 
         
     def get_historical_data(self, stock_name, start, end, T):
@@ -94,7 +86,9 @@ class Main:
         if PCA > 0:
             dr.pca(PCA)
             # dr.skpca(PCA)
-            # dr.kpca(PCA)
+        
+        if KPCA > 0:
+            dr.kpca(KPCA)
         
         df = dr.df
         # print(df)
@@ -103,8 +97,12 @@ class Main:
 
         ml_model = ml_algorithms.Ml_algorithms(df)
         ml_model.adj_df()
-        predicted = ml_model.svr()
-        # predicted, target = ml_model.knr()
+
+        if SVR:
+            predicted = ml_model.svr()
+
+        if KNR:
+            predicted = ml_model.knr() 
 
         return predicted
 
@@ -124,8 +122,28 @@ class Main:
             predicted = self.predict(new_df, normalisation, savgol, PCA, KPCA, SVR, KNR)
             pred_vals += [(predicted, self.pred['Close'][i+1])]
         
-        print(pred_vals)
+        # print(pred_vals)
 
         return pred_vals
 
-Main("MSFT", normalisation=True, savgol=False, PCA=10, T=5)
+    def show_results(self, pred):
+
+        pred_df = self.pred.copy(deep=True)
+        pred_df = pred_df.drop(columns=['Close'])
+        pred_close = [x[0] for x in pred]
+        actual_close = [x[1] for x in pred]
+        pred_df['Predicted Close'] = pred_close
+        pred_df['Actual Close'] = actual_close
+        
+        print(pred_df)
+
+        e = evaluation.Evaluation(pred)
+        mae = e.mae()
+        rmse = e.rmse()
+        r = e.r()
+
+        print("MAE:" + str(mae))
+        print("RMSE:" + str(rmse))
+        print("R-Squared:" + str(r))
+
+Main("MSFT", normalisation=True, savgol=False, PCA=0, T=10)
