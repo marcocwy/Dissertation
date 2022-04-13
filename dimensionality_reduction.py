@@ -9,26 +9,6 @@ class Dimensionality_reduction:
     def __init__(self, df):
         self.df = df
 
-    # def skpca(self, n):
-    #     target = pd.DataFrame(self.df['Close'])
-    #     X = self.df
-    #     pca = PCA(n_components=n)
-    #     pca.fit(X)
-    #     X = pca.transform(X)
-    #     # print(X)
-
-    #     headings = []
-    #     for i in range(n):
-    #         heading = "PC" + str(i+1)
-    #         headings += [heading]
-    #     # print(headings)
-    #     pc_vals = pd.DataFrame(X, index = target.index ,columns = headings)
-    #     # print(pc_vals)
-
-    #     pc_df = pd.concat([target, pc_vals] , axis = 1)
-    #     print(pc_df)
-
-
     def pca(self, n):
         '''
         Principle component analysis to reduce dimensions
@@ -133,9 +113,12 @@ class Dimensionality_reduction:
 
         self.df = pc_df
         # print(self.df)
-        
-        # return X_pc
 
-        # data_set_transformed = data_set
-        
-        # return data_set_transformed
+    def lvf(self, n):
+        df = self.df.drop(columns=['Close'])
+
+        vars = df.var().sort_values(ascending=False)
+        vars = vars[:n].index.tolist()
+        labels = ['Close'] + vars
+
+        self.df = self.df[labels]
