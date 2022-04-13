@@ -66,8 +66,10 @@ class Main:
         pp = pre_processing.Pre_processing(df)
 
         pp.clean_df()
-        pp.normalisation()
         # print(pp.df)
+
+        if PCA > 0 or KPCA > 0 or LVF > 0:
+            pp.normalisation()
 
         if savgol:
             pp.savitzky_golay(5, 2)
