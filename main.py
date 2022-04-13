@@ -10,7 +10,7 @@ import datetime as dt
 
 class Main:
     
-    def __init__(self, stock_name, normalisation=False, savgol=False, PCA=0, KPCA=0, SVR=True, KNR=False, T=5):
+    def __init__(self, stock_name, savgol=False, PCA=0, KPCA=0, LVF=0, SVR=True, KNR=False, T=5):
         
         ############################## Get historical data ##############################
         start = "2020-03-02"
@@ -19,9 +19,9 @@ class Main:
         self.df , self.pred = self.get_historical_data(stock_name, start, end, T)
 
         print('Predicting next '+str(T)+ ' days of '+stock_name+' market close price...')
-        pred_vals = self.predict_period(normalisation, savgol, PCA, KPCA, SVR, KNR, T)
+        pred_vals = self.predict_period(savgol, PCA, KPCA, LVF, SVR, KNR, T)
 
-        self.show_results(pred_vals)
+        # self.show_results(pred_vals)
 
         
     def get_historical_data(self, stock_name, start, end, T):
@@ -49,7 +49,7 @@ class Main:
 
         return df, pred
 
-    def predict(self, dframe, normalisation, savgol, PCA, KPCA, SVR, KNR):
+    def predict(self, dframe, savgol, PCA, KPCA, LVF, SVR, KNR):
         '''
         predict T+1 stock value
         '''
@@ -66,10 +66,7 @@ class Main:
         pp = pre_processing.Pre_processing(df)
 
         pp.clean_df()
-        # print(pp.df)
-
-        if normalisation:
-            pp.normalisation()
+        pp.normalisation()
         # print(pp.df)
 
         if savgol:
@@ -77,7 +74,7 @@ class Main:
         # print(pp.df)
 
         df = pp.df
-        # print(self.df)
+        print(df)
         
         ############################## Dimensionality Reduction ##############################
 
@@ -90,6 +87,9 @@ class Main:
         if KPCA > 0:
             dr.kpca(KPCA)
         
+        if LVF > 0:
+            dr.lvf(LVF)
+
         df = dr.df
         # print(df)
         
@@ -106,9 +106,9 @@ class Main:
 
         return predicted
 
-    def predict_period(self, normalisation, savgol, PCA, KPCA, SVR, KNR, T):
+    def predict_period(self, savgol, PCA, KPCA, LVF, SVR, KNR, T):
         
-        predicted = self.predict(self.df, normalisation, savgol, PCA, KPCA, SVR, KNR)
+        predicted = self.predict(self.df, savgol, PCA, KPCA, LVF, SVR, KNR)
 
         pred_vals = [(predicted, self.pred['Close'][0])]
 
@@ -119,7 +119,7 @@ class Main:
             temp_df = self.pred.iloc[i].to_frame().transpose()
             temp_df = temp_df.assign(Close=predicted)
             new_df = new_df.append(temp_df)
-            predicted = self.predict(new_df, normalisation, savgol, PCA, KPCA, SVR, KNR)
+            predicted = self.predict(new_df, savgol, PCA, KPCA, LVF, SVR, KNR)
             pred_vals += [(predicted, self.pred['Close'][i+1])]
         
         # print(pred_vals)
@@ -146,4 +146,4 @@ class Main:
         print("RMSE:" + str(rmse))
         print("R-Squared:" + str(r))
 
-Main("MSFT", normalisation=True, savgol=False, PCA=0, T=10)
+Main("MSFT", savgol=False, KPCA=10, T=1)
