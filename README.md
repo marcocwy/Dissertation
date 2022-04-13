@@ -28,6 +28,7 @@ Features implemented:
 -   Dimensionality reduction technique:
     -   PCA (Principal Component Analysis)                   change code
     -   KPCA (Kernel Principal Component Analysis)           change code
+    -   LVF (Low Variance Filter)
 -   Machine learning algorithms: 
     -   SVR (Support Vector Regression)                      change code
     -   KNN (K Nearest Neighbour)                            change code
@@ -40,7 +41,42 @@ Features currently working on:
 
 
 Features yet to implement:
--   Machine learning algorithms:
-    -   More potentially?
+-   Alter Main file to group functions better
 -   Commenting code / functions
--   Dissertation write up
+
+Dissertation:
+- Abstract
+    -   Rework
+    -   Need a clean objective
+-   Introduction
+    -   
+-   Literature Review
+    -   Implement 3.4-3.6 into literature review
+    -   What methods are currently used in the financial world
+    -   What other dimensionality reduction methods are popular
+    -   Combination explosion when clustering is used / regression
+    -   Add research of Low variance filter
+    -   Need to be able to justify why this dissertation is important/unique
+    -   Concepts explained when necessary
+    -   Comparison to similar attempts
+    -   summary of the methods to date
+    -   Check standard book chapter citation
+-   Requirement and Analysis
+    -   Explain each part with more technical details
+    -   Use algorithms to explain the maths to show understanding
+-   Plan
+    -   Redo Gantt chart
+-   Discussion of Code
+    -   Method used
+    -   Brief discussion of code
+    -   Libraries used
+        -   Include how scikit-learn is a well-establised library
+-   Results
+    -   Describe findings
+    -   Unaltered database as baseline for others to comapre to
+    -   Use graphs and tables
+-   Evaluation
+    -   How well the objectives were satisfied
+    -   How appropriate the processed turned out to be
+    -   Further directions of study 
+    -   Relationships with other people's work
