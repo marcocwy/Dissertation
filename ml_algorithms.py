@@ -11,6 +11,13 @@ class Ml_algorithms:
         self.test = []
 
     def adj_df(self):
+        '''
+        correcting database, so that i technical indicators are generated from the close price of i-1 day
+        ---------- Params ---------- 
+        none  
+        ---------- Returns ---------- 
+        void, function transforms self.df
+        '''
         self.test = self.df.iloc[-1].tolist()
         self.test.pop(0)
 
@@ -20,6 +27,9 @@ class Ml_algorithms:
         self.df = pp.df
 
     def get_data(self):
+        '''
+        return a list of data, and the target price
+        '''
         df_data = self.df.drop('Close', axis=1)
         data = []
         for i in range(df_data.shape[0]):
@@ -33,8 +43,11 @@ class Ml_algorithms:
         return data, prices
 
     def svr(self):
+        '''
+        Support vector machine regression 
+        '''
         # print("Machine learning with SVR...")
-
+    
         data, prices = self.get_data()
 
         # # lin_model  = SVR(kernel='linear', C=1e3)
@@ -53,6 +66,9 @@ class Ml_algorithms:
         return predicted
 
     def knr(self, n=3):
+        '''
+        K nearest neighbour regression
+        '''
 
         # print("Machine learning with KNR...")
 

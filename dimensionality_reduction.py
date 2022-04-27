@@ -64,34 +64,40 @@ class Dimensionality_reduction:
         # print(self.df)
 
     def kpca(self, n):
-        
+        '''
+        Kernal Principle component analysis to reduce dimensions
+        ---------- Params ---------- 
+        n: int
+            Number of principal components to return    
+        ---------- Returns ---------- 
+        void, function transforms self.df
+        '''
         df = self.df.drop(columns=['Close'])
         target = pd.DataFrame(self.df['Close'])
 
-        gamma = 15 #fload
+        gamma = 15 #fload for kernal function
 
         # Calculate pairwise squared Euclidean distances
-        # in the MxN dimensional dataset.
         sq_dists = sp.spatial.distance.pdist(df, 'sqeuclidean')
         # print(sq_dists)
 
         # Convert pairwise distances into a square matrix.
         mat_sq_dists = sp.spatial.distance.squareform(sq_dists)    
+
         # Compute the symmetric kernel matrix.
         K = sp.exp(-gamma * mat_sq_dists)
 
-        # Center the kernel matrix.
+        # Centering kernel matrix
         N = K.shape[0]
         one_n = np.ones((N,N)) / N
         K = K - one_n.dot(K) - K.dot(one_n) + one_n.dot(K).dot(one_n)
 
         # Obtaining eigenpairs from the centered kernel matrix
-        # scipy.linalg.eigh returns them in ascending order
         eigvals, eigvecs = np.linalg.eigh(K)
         sorted_eig_vals = eigvals[::-1]
         sorted_eig_vecs = eigvecs[:, ::-1]
 
-        # Collect the top k eigenvectors (projected examples)
+        # Collect the first i eigenvectors
         data_set_transformed = np.column_stack([sorted_eig_vecs[:, i] for i in range(n)])    
 
         headings = []
@@ -115,6 +121,14 @@ class Dimensionality_reduction:
         # print(self.df)
 
     def lvf(self, n):
+        '''
+        Low variance filter to reduce dimensions
+        ---------- Params ---------- 
+        n: int
+            Number of principal components to return    
+        ---------- Returns ---------- 
+        void, function transforms self.df
+        '''
         df = self.df.drop(columns=['Close'])
 
         vars = df.var().sort_values(ascending=False)

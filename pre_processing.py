@@ -9,6 +9,9 @@ class Pre_processing:
         self.headings.pop(0) #removing first item in list, which is closing, as it does not need to be normalised
 
     def clean_df(self):
+        '''
+        removing any records containing nan value
+        '''
         # print("Cleaning data frame...")
         contain_nan = []
         for i in range(self.df.shape[0]):
@@ -21,6 +24,9 @@ class Pre_processing:
         return self.df
 
     def normalisation(self): #put values between 0 and 1
+        '''
+        normalise data to 0 and 1
+        '''
         # print("Normalising data frame...")
         for col in self.headings:
             self.df[col] = self.df[col] / self.df[col].sum()
@@ -28,6 +34,9 @@ class Pre_processing:
         
 
     def savitzky_golay(self, n, order):  # n:odd, >=3, order <= n - 2
+        '''
+        savitzky golay smoothing filter
+        '''
         # print("Applying savitzky_golay filter to data frame...")
         for col in self.headings:
             vals = self.df[col].tolist()

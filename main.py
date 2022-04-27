@@ -27,6 +27,9 @@ class Main:
         self.show_results(pred_vals)
 
     def print_configurations(self, stock_name, savgol, PCA, KPCA, LVF, SVR, KNR, T):
+        '''
+        print configuration in console
+        '''
         print('Predicting next '+str(T)+ ' days of '+stock_name+' market close price...')
 
         if savgol:
@@ -53,7 +56,9 @@ class Main:
         print('SavGol: '+savgol+ ', dimensional reduction method: '+dr_method+', Machine learning algorithm: '+ ml_method)
         
     def get_historical_data(self, stock_name, start, end, T):
-
+        '''
+        Return data given the stock and period of data, as well as test data
+        '''
         ticker = yf.Ticker(stock_name).history(start=start, end=end) #retrieving all historical market data (fisrt val 2020-03-02, last val 2021-03-02)
         df = ticker[['Close']] # extracting closing market value for the stock
         
@@ -79,7 +84,7 @@ class Main:
 
     def predict(self, dframe, savgol, PCA, KPCA, LVF, SVR, KNR):
         '''
-        predict T+1 stock value
+        predict stock price of the next day
         '''
         df = dframe.copy(deep=True)
         ############################## Populating dataframe ##############################
@@ -137,7 +142,9 @@ class Main:
         return predicted
 
     def predict_period(self, savgol, PCA, KPCA, LVF, SVR, KNR, T):
-        
+        '''
+        Rolling window of prediction for the next T days 
+        '''
         predicted = self.predict(self.df, savgol, PCA, KPCA, LVF, SVR, KNR)
         print(predicted)
         pred_vals = [(predicted, self.pred['Close'][0])]
@@ -161,7 +168,9 @@ class Main:
         return pred_vals
 
     def show_results(self, pred):
-
+        '''
+        print evaluation metrics in console
+        '''
         pred_df = self.pred.copy(deep=True)
         pred_df = pred_df.drop(columns=['Close'])
         pred_close = [x[0] for x in pred]

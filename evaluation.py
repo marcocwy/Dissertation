@@ -7,6 +7,14 @@ class Evaluation:
         self.pred = pred
 
     def mae(self):
+        '''
+        Mean average errors 
+        ---------- Params ---------- 
+        none 
+        ---------- Returns ---------- 
+        mae: int
+            mae value
+        '''
         n = len(self.pred)
         sae = 0   #sum absolute errors
         for pair in self.pred:
@@ -16,6 +24,14 @@ class Evaluation:
         return mae
 
     def rmse(self):
+        '''
+        Root mean squared errors 
+        ---------- Params ---------- 
+        none   
+        ---------- Returns ---------- 
+        rmse: int
+            rmse value
+        '''
         n = len(self.pred)
         sase = 0   #sum absolute squared errors
         for pair in self.pred:
@@ -26,6 +42,14 @@ class Evaluation:
         return rmse
 
     def r(self):
+        '''
+        R-squared 
+        ---------- Params ---------- 
+        None
+        ---------- Returns ---------- 
+        r: int
+            r squared value
+        '''
         n = len(self.pred)
         sxy, sx, sy, sxs, sys = 0, 0, 0, 0, 0
         for pair in self.pred:
@@ -40,5 +64,5 @@ class Evaluation:
 
         ssr = (n * sxy) - (sx * sy)   #sum squared regression
         sst = math.sqrt( ((n * sxs) - sx**2) * ((n * sys) - sy**2) )   #total sum of suares
-        rmse = (ssr / sst)**2
-        return rmse
+        r = (ssr / sst)**2
+        return r
