@@ -14,9 +14,7 @@ class Main:
     def __init__(self, stock_name, savgol=False, PCA=0, KPCA=0, LVF=0, SVR=False, KNR=False, T=10):
         
         ############################## Get historical data ##############################
-        # start = "2020-03-02"
-        # end = "2021-03-03"
-        start = "2018-03-02"
+        start = "2020-03-02"
         end = "2021-03-03"
 
         self.df , self.pred = self.get_historical_data(stock_name, start, end, T)
@@ -89,7 +87,7 @@ class Main:
         df = dframe.copy(deep=True)
         ############################## Populating dataframe ##############################
 
-        f = features.Features(df)
+        f = features.Features(df, savgol)
         f.populate_data_frame()   
         
         df = f.df.copy(deep=True)
@@ -97,17 +95,8 @@ class Main:
         ############################## Preprocessing dataframe ##############################
 
         pp = pre_processing.Pre_processing(df)
-
         pp.clean_df()
         # print(pp.df)
-
-        if PCA > 0 or KPCA > 0 or LVF > 0:
-            pp.normalisation()
-
-        if savgol:
-            pp.savitzky_golay(5, 2)
-        # print(pp.df)
-
         df = pp.df.copy(deep=True)
         # print(df)
         
@@ -197,21 +186,21 @@ class Main:
         new_df.plot(kind = 'line')
         # plt.show()
         
+STOCK = "WMT"
+Main(STOCK, savgol=False, SVR=True, T=10)
+Main(STOCK, savgol=True, SVR=True, T=10)
+# Main(STOCK, savgol=False, PCA=10, SVR=True, T=10)
+# Main(STOCK, savgol=True, PCA=10, SVR=True, T=10)
+# Main(STOCK, savgol=False, KPCA=10, SVR=True, T=10)
+# Main(STOCK, savgol=True, KPCA=10, SVR=True, T=10)
+# Main(STOCK, savgol=False, LVF=10, SVR=True, T=10)
+# Main(STOCK, savgol=True, LVF=10, SVR=True, T=10)
 
-# Main("MSFT", savgol=False, SVR=True, T=10)
-Main("MSFT", savgol=False, PCA=10, SVR=True, T=1)
-# Main("MSFT", savgol=False, KPCA=10, SVR=True, T=10)
-# Main("MSFT", savgol=False, LVF=10, SVR=True, T=10)
-# Main("MSFT", savgol=True, SVR=True, T=10)
-# Main("MSFT", savgol=True, PCA=10, SVR=True, T=10)
-# Main("MSFT", savgol=True, KPCA=10, SVR=True, T=10)
-# Main("MSFT", savgol=True, LVF=10, SVR=True, T=10)
-
-# Main("MSFT", savgol=False, KNR=True, T=10)
-# Main("MSFT", savgol=False, PCA=10, KNR=True, T=10)
-# Main("MSFT", savgol=False, KPCA=10, KNR=True, T=10)
-# Main("MSFT", savgol=False, LVF=10, KNR=True, T=10)
-# Main("MSFT", savgol=True, KNR=True, T=10)
-# Main("MSFT", savgol=True, PCA=10, KNR=True, T=10)
-# Main("MSFT", savgol=True, KPCA=10, KNR=True, T=10)
-# Main("MSFT", savgol=True, LVF=10, KNR=True, T=10)
+# Main(STOCK, savgol=False, KNR=True, T=10)
+# Main(STOCK, savgol=True, KNR=True, T=10)
+# Main(STOCK, savgol=False, PCA=10, KNR=True, T=10)
+# Main(STOCK, savgol=True, PCA=10, KNR=True, T=10)
+# Main(STOCK, savgol=False, KPCA=10, KNR=True, T=10)
+# Main(STOCK, savgol=True, KPCA=10, KNR=True, T=10)
+# Main(STOCK, savgol=False, LVF=10, KNR=True, T=10)
+# Main(STOCK, savgol=True, LVF=10, KNR=True, T=10)
