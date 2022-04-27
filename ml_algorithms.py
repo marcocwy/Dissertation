@@ -62,9 +62,11 @@ class Ml_algorithms:
 
         model.fit(data, prices)
         # print(self.test)
-        predicted = model.predict([self.test])
+        predicted = model.predict([self.test])[0]
 
-        print("Predicted value: $" + str(predicted[0]))
-        print("Actual value: $" + str(self.target))
-        per_error = abs(self.target-predicted[0])/predicted[0] * 100
-        print("Percentage Error: " + str(per_error) + "%")
+        # print("Predicted value: $" + str(predicted[0]))
+        # print("Actual value: $" + str(self.target))
+        # per_error = abs(self.target-predicted[0])/predicted[0] * 100
+        # print("Percentage Error: " + str(per_error) + "%")
+
+        return predicted
