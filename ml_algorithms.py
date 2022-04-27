@@ -62,7 +62,6 @@ class Ml_algorithms:
         # print("Machine learning with SVR...")
     
         data, prices = self.get_data()
-
         data, prices, last_price = self.detrending(data, prices)
         
         rbf_model = SVR(kernel='rbf', C=1e3, gamma=0.1)
@@ -89,16 +88,13 @@ class Ml_algorithms:
         # print("Machine learning with KNR...")
 
         data, prices = self.get_data()
+        data, prices, last_price = self.detrending(data, prices)
         
         model = KNR(n)
 
         model.fit(data, prices)
         # print(self.test)
         predicted = model.predict([self.test])[0]
+        adjusted = last_price + predicted
 
-        # print("Predicted value: $" + str(predicted[0]))
-        # print("Actual value: $" + str(self.target))
-        # per_error = abs(self.target-predicted[0])/predicted[0] * 100
-        # print("Percentage Error: " + str(per_error) + "%")
-
-        return predicted
+        return adjusted
