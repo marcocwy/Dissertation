@@ -7,22 +7,50 @@ import features
 import pandas as pd
 import yfinance as yf
 import datetime as dt
+import matplotlib.pyplot as plt
 
 class Main:
     
-    def __init__(self, stock_name, savgol=False, PCA=0, KPCA=0, LVF=0, SVR=True, KNR=False, T=5):
+    def __init__(self, stock_name, savgol=False, PCA=0, KPCA=0, LVF=0, SVR=False, KNR=False, T=10):
         
         ############################## Get historical data ##############################
-        start = "2020-03-02"
+        # start = "2020-03-02"
+        # end = "2021-03-03"
+        start = "2018-03-02"
         end = "2021-03-03"
 
         self.df , self.pred = self.get_historical_data(stock_name, start, end, T)
 
-        print('Predicting next '+str(T)+ ' days of '+stock_name+' market close price...')
+        self.print_configurations(stock_name, savgol, PCA, KPCA, LVF, SVR, KNR, T)
         pred_vals = self.predict_period(savgol, PCA, KPCA, LVF, SVR, KNR, T)
 
-        # self.show_results(pred_vals)
+        self.show_results(pred_vals)
 
+    def print_configurations(self, stock_name, savgol, PCA, KPCA, LVF, SVR, KNR, T):
+        print('Predicting next '+str(T)+ ' days of '+stock_name+' market close price...')
+
+        if savgol:
+            savgol = "On"
+        else:
+            savgol = "Off"
+        
+        dr_method = "None"
+        if PCA > 0:
+            dr_method = "PCA"
+
+        if KPCA > 0:
+            dr_method = "KPCA"
+
+        if LVF > 0:
+            dr_method = "LVF"
+
+        if SVR:
+            ml_method = "SVR"
+
+        if KNR:
+            ml_method = "KNR"
+        
+        print('SavGol: '+savgol+ ', dimensional reduction method: '+dr_method+', Machine learning algorithm: '+ ml_method)
         
     def get_historical_data(self, stock_name, start, end, T):
 
@@ -59,7 +87,7 @@ class Main:
         f = features.Features(df)
         f.populate_data_frame()   
         
-        df = f.df
+        df = f.df.copy(deep=True)
 
         ############################## Preprocessing dataframe ##############################
 
@@ -75,8 +103,8 @@ class Main:
             pp.savitzky_golay(5, 2)
         # print(pp.df)
 
-        df = pp.df
-        print(df)
+        df = pp.df.copy(deep=True)
+        # print(df)
         
         ############################## Dimensionality Reduction ##############################
 
@@ -92,7 +120,7 @@ class Main:
         if LVF > 0:
             dr.lvf(LVF)
 
-        df = dr.df
+        df = dr.df.copy(deep=True)
         # print(df)
         
         ############################## Machine Learning ##############################
@@ -111,7 +139,7 @@ class Main:
     def predict_period(self, savgol, PCA, KPCA, LVF, SVR, KNR, T):
         
         predicted = self.predict(self.df, savgol, PCA, KPCA, LVF, SVR, KNR)
-
+        print(predicted)
         pred_vals = [(predicted, self.pred['Close'][0])]
 
         temp_df = self.pred.copy(deep=True)
@@ -120,9 +148,13 @@ class Main:
         for i in range(T-1):
             temp_df = self.pred.iloc[i].to_frame().transpose()
             temp_df = temp_df.assign(Close=predicted)
-            new_df = new_df.append(temp_df)
+            new_df = pd.concat([new_df, temp_df])
+            # new_df = new_df.append(temp_df)
+            # print(new_df)
+            # print(new_df2)
             predicted = self.predict(new_df, savgol, PCA, KPCA, LVF, SVR, KNR)
             pred_vals += [(predicted, self.pred['Close'][i+1])]
+            print(predicted)
         
         # print(pred_vals)
 
@@ -137,7 +169,7 @@ class Main:
         pred_df['Predicted Close'] = pred_close
         pred_df['Actual Close'] = actual_close
         
-        print(pred_df)
+        # print(pred_df)
 
         e = evaluation.Evaluation(pred)
         mae = e.mae()
@@ -148,4 +180,29 @@ class Main:
         print("RMSE:" + str(rmse))
         print("R-Squared:" + str(r))
 
-Main("MSFT", savgol=False, KPCA=10, T=1)
+        temp_df = self.df.copy(deep=True)
+        temp_df.rename(columns={'Close': 'Actual Close'}, inplace=True)
+        # print(temp_df)
+        new_df = pd.concat([temp_df, pred_df])
+
+        new_df.plot(kind = 'line')
+        plt.show()
+        
+
+# Main("MSFT", savgol=False, SVR=True, T=10)
+Main("MSFT", savgol=False, PCA=10, SVR=True, T=10)
+# Main("MSFT", savgol=False, KPCA=10, SVR=True, T=30)
+# Main("MSFT", savgol=False, LVF=10, SVR=True, T=10)
+# Main("MSFT", savgol=True, SVR=True, T=10)
+# Main("MSFT", savgol=True, PCA=10, SVR=True, T=10)
+# Main("MSFT", savgol=True, KPCA=10, SVR=True, T=10)
+# Main("MSFT", savgol=True, LVF=10, SVR=True, T=10)
+
+# Main("MSFT", savgol=False, KNR=True, T=10)
+# Main("MSFT", savgol=False, PCA=10, KNR=True, T=10)
+# Main("MSFT", savgol=False, KPCA=10, KNR=True, T=10)
+# Main("MSFT", savgol=False, LVF=10, KNR=True, T=10)
+# Main("MSFT", savgol=True, KNR=True, T=10)
+# Main("MSFT", savgol=True, PCA=10, KNR=True, T=10)
+# Main("MSFT", savgol=True, KPCA=10, KNR=True, T=10)
+# Main("MSFT", savgol=True, LVF=10, KNR=True, T=10)
