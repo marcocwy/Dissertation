@@ -52,6 +52,7 @@ Dissertation:
     -   
 -   Literature Review
     -   Implement 3.4-3.6 into literature review
+    -   Technical indicators
     -   What methods are currently used in the financial world
     -   What other dimensionality reduction methods are popular
     -   Combination explosion when clustering is used / regression
@@ -63,6 +64,7 @@ Dissertation:
     -   Check standard book chapter citation
 -   Requirement and Analysis
     -   Explain each part with more technical details
+    -   Technical indicators
     -   Use algorithms to explain the maths to show understanding
 -   Plan
     -   Redo Gantt chart
