@@ -1,9 +1,11 @@
 import numpy as np
 import pandas as pd
+from scipy import signal as s
 
 class Features: 
-    def __init__(self, df):        
+    def __init__(self, df, savgol):        
         self.df = df
+        self.savgol = savgol
         pd.options.mode.chained_assignment = None # default='warn', turn off chain assignment warning
 
     def add_column(self, heading, values):
@@ -12,10 +14,24 @@ class Features:
         '''
         self.df[heading] = values
 
+    def savitzky_golay(self, n, order):  # n:odd, >=3, order <= n - 2
+        '''
+        savitzky golay smoothing filter
+        '''
+        vals = self.df['Close'].tolist()
+        savgol = s.savgol_filter(vals, n, order).tolist()
+        return savgol
+
     def populate_data_frame(self):
         '''
         Poplate data frame with features
         '''
+        close = self.df['Close'].tolist()
+        if self.savgol:
+            savgol = self.savitzky_golay(5, 2)
+            # print(savgol)
+            self.df['Close'] = savgol
+
         # self.df['MA'] = self.df.rolling(window=5).mean()
         # print('Populating data frame...')
         self.add_column("5SMA"        ,self.sma(5))
@@ -51,6 +67,9 @@ class Features:
         self.add_column("9K"          ,self.sok(9))
         self.add_column("9D"          ,self.sod(9, 3))
         
+        if self.savgol:
+            self.df['Close'] = close
+        # print(self.df)
 
     def sma(self, n):
         ''' 
