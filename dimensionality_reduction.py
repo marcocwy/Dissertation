@@ -9,6 +9,16 @@ class Dimensionality_reduction:
     def __init__(self, df):
         self.df = df
 
+    def normalisation(self):
+        '''
+        Normalisation
+        '''
+        headings = list(self.df.columns.values)
+        headings.pop(0) #removing first item in list, which is closing, as it does not need to be normalised
+        for col in headings:
+            self.df[col] = self.df[col] / self.df[col].sum()
+
+
     def pca(self, n):
         '''
         Principle component analysis to reduce dimensions
@@ -19,11 +29,12 @@ class Dimensionality_reduction:
         void, function transforms self.df
         '''
         # print("Applying PCA to data frame...")
+        self.normalisation()
         df = self.df.drop(columns=['Close'])
 
         target = pd.DataFrame(self.df['Close'])
 
-
+        
         #centering
         df_centered = df - np.mean(df, axis = 0) # mean:0, devi:1
         
@@ -72,6 +83,7 @@ class Dimensionality_reduction:
         ---------- Returns ---------- 
         void, function transforms self.df
         '''
+        self.normalisation()
         df = self.df.drop(columns=['Close'])
         target = pd.DataFrame(self.df['Close'])
 
@@ -129,6 +141,7 @@ class Dimensionality_reduction:
         ---------- Returns ---------- 
         void, function transforms self.df
         '''
+        self.normalisation()
         df = self.df.drop(columns=['Close'])
 
         vars = df.var().sort_values(ascending=False)
