@@ -146,7 +146,7 @@ class Main:
         Rolling window of prediction for the next T days 
         '''
         predicted = self.predict(self.df, savgol, PCA, KPCA, LVF, SVR, KNR)
-        print(predicted)
+        # print(predicted)
         pred_vals = [(predicted, self.pred['Close'][0])]
 
         temp_df = self.pred.copy(deep=True)
@@ -161,7 +161,7 @@ class Main:
             # print(new_df2)
             predicted = self.predict(new_df, savgol, PCA, KPCA, LVF, SVR, KNR)
             pred_vals += [(predicted, self.pred['Close'][i+1])]
-            print(predicted)
+            # print(predicted)
         
         # print(pred_vals)
 
@@ -178,7 +178,7 @@ class Main:
         pred_df['Predicted Close'] = pred_close
         pred_df['Actual Close'] = actual_close
         
-        # print(pred_df)
+        print(pred_df)
 
         e = evaluation.Evaluation(pred)
         mae = e.mae()
@@ -195,12 +195,12 @@ class Main:
         new_df = pd.concat([temp_df, pred_df])
 
         new_df.plot(kind = 'line')
-        plt.show()
+        # plt.show()
         
 
 # Main("MSFT", savgol=False, SVR=True, T=10)
-Main("MSFT", savgol=False, PCA=10, SVR=True, T=10)
-# Main("MSFT", savgol=False, KPCA=10, SVR=True, T=30)
+Main("MSFT", savgol=False, PCA=10, SVR=True, T=1)
+# Main("MSFT", savgol=False, KPCA=10, SVR=True, T=10)
 # Main("MSFT", savgol=False, LVF=10, SVR=True, T=10)
 # Main("MSFT", savgol=True, SVR=True, T=10)
 # Main("MSFT", savgol=True, PCA=10, SVR=True, T=10)

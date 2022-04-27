@@ -2,6 +2,8 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor as KNR
+from sklearn.linear_model import LinearRegression
+from matplotlib import pyplot
 import pre_processing
 
 class Ml_algorithms: 
@@ -39,8 +41,19 @@ class Ml_algorithms:
         # print(data)
 
         prices = self.df['Close'].tolist()
-        # print(prices)
+        
         return data, prices
+
+
+    def detrending(self, data, prices):
+        '''
+        detrending by differencing, return a list of data, and the target price
+        '''
+        latest = prices[-1]
+        prices = np.diff(prices)
+        data.pop(0)
+        return data, prices, latest
+
 
     def svr(self):
         '''
@@ -50,20 +63,23 @@ class Ml_algorithms:
     
         data, prices = self.get_data()
 
-        # # lin_model  = SVR(kernel='linear', C=1e3)
-        # # poly_model = SVR(kernel='poly', C=1e3, degree=2)
+        data, prices, last_price = self.detrending(data, prices)
+        
         rbf_model = SVR(kernel='rbf', C=1e3, gamma=0.1)
 
         rbf_model.fit(data, prices)
+        
+        # # plotting model
+        # trend = rbf_model.predict(data)
+        # # plot trend
+        # pyplot.plot(prices)
+        # pyplot.plot(trend)
+        # pyplot.show()
 
         predicted = rbf_model.predict([self.test])[0]
-
-        # print("Predicted value: " + str(predicted))
-        # print("Actual value: " + str(self.target))
-        # per_error = abs(self.target-predicted)/predicted * 100
-        # print("Percentage Error: " + str(per_error) + "%")
-
-        return predicted
+        adjusted = last_price + predicted
+        return adjusted
+  
 
     def knr(self, n=3):
         '''
