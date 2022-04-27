@@ -39,6 +39,6 @@ class Evaluation:
             sys += y**2
 
         ssr = (n * sxy) - (sx * sy)   #sum squared regression
-        sst = math.sqrt((n * sxs) - sx**2) * math.sqrt((n * sys) - sy**2)   #total sum of suares
+        sst = math.sqrt( ((n * sxs) - sx**2) * ((n * sys) - sy**2) )   #total sum of suares
         rmse = (ssr / sst)**2
         return rmse
