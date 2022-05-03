@@ -1,4 +1,3 @@
-import sklearn as sk
 import math
 
 class Evaluation:

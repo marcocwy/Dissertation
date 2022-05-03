@@ -1,4 +1,3 @@
-import pre_processing
 import dimensionality_reduction
 import ml_algorithms
 import evaluation
@@ -91,13 +90,14 @@ class Main:
         f.populate_data_frame()   
         
         df = f.df.copy(deep=True)
+        print(df)
 
         ############################## Preprocessing dataframe ##############################
 
-        pp = pre_processing.Pre_processing(df)
-        pp.clean_df()
-        # print(pp.df)
-        df = pp.df.copy(deep=True)
+        # pp = pre_processing.Pre_processing(df)
+        # pp.clean_df()
+        # # print(pp.df)
+        # df = pp.df.copy(deep=True)
         # print(df)
         
         ############################## Dimensionality Reduction ##############################
@@ -182,12 +182,12 @@ class Main:
         temp_df.rename(columns={'Close': 'Actual Close'}, inplace=True)
         # print(temp_df)
         new_df = pd.concat([temp_df, pred_df])
-
-        # new_df.plot(kind = 'line')
-        # plt.show()
+        print(new_df)
+        new_df.plot(kind = 'line')
+        plt.show()
         
-STOCK = "NVDA"
-# Main(STOCK, savgol=False, SVR=True, T=10)
+STOCK = "MSFT"
+Main(STOCK, savgol=False, SVR=True, T=10)
 # Main(STOCK, savgol=True, SVR=True, T=10)
 # Main(STOCK, savgol=False, PCA=10, SVR=True, T=10)
 # Main(STOCK, savgol=True, PCA=10, SVR=True, T=10)
@@ -196,11 +196,11 @@ STOCK = "NVDA"
 # Main(STOCK, savgol=False, LVF=10, SVR=True, T=10)
 # Main(STOCK, savgol=True, LVF=10, SVR=True, T=10)
 
-Main(STOCK, savgol=False, KNR=True, T=10)
-Main(STOCK, savgol=True, KNR=True, T=10)
-Main(STOCK, savgol=False, PCA=10, KNR=True, T=10)
-Main(STOCK, savgol=True, PCA=10, KNR=True, T=10)
-Main(STOCK, savgol=False, KPCA=10, KNR=True, T=10)
-Main(STOCK, savgol=True, KPCA=10, KNR=True, T=10)
-Main(STOCK, savgol=False, LVF=10, KNR=True, T=10)
-Main(STOCK, savgol=True, LVF=10, KNR=True, T=10)
+# Main(STOCK, savgol=False, KNR=True, T=10)
+# Main(STOCK, savgol=True, KNR=True, T=10)
+# Main(STOCK, savgol=False, PCA=10, KNR=True, T=10)
+# Main(STOCK, savgol=True, PCA=10, KNR=True, T=10)
+# Main(STOCK, savgol=False, KPCA=10, KNR=True, T=10)
+# Main(STOCK, savgol=True, KPCA=10, KNR=True, T=10)
+# Main(STOCK, savgol=False, LVF=10, KNR=True, T=10)
+# Main(STOCK, savgol=True, LVF=10, KNR=True, T=10)
