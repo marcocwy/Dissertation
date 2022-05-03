@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 from scipy import signal as s
+import matplotlib.pyplot as plt
+import math
 
 class Features: 
     def __init__(self, df, savgol):        
@@ -66,10 +68,27 @@ class Features:
         self.add_column("25ROC"       ,self.roc(25))
         self.add_column("9K"          ,self.sok(9))
         self.add_column("9D"          ,self.sod(9, 3))
-        
+
         if self.savgol:
             self.df['Close'] = close
         # print(self.df)
+
+        self.df = self.df.dropna()
+
+    def detrending(self, data):
+        '''
+        detrending by differencing ignoring the fist n Nan values, return a list of detrended data
+        '''
+        nans = []
+        vals = []
+        for val in data:
+            if math.isnan(val):
+                nans += [val]
+            else:
+                vals += [val]
+        vals = np.diff(vals).tolist()
+        data = nans + [np.nan] + vals
+        return data
 
     def sma(self, n):
         ''' 
@@ -92,6 +111,7 @@ class Features:
             val /= n #work out average
             vals += [val]
 
+        vals = self.detrending(vals)
         return vals
 
     
@@ -99,6 +119,8 @@ class Features:
 
         vals = self.df.ewm(span = n, adjust=True, min_periods = n).mean() #add min_period
         vals = vals['Close'].tolist()
+
+        vals = self.detrending(vals)
 
         return vals
 

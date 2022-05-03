@@ -2,9 +2,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVR
 from sklearn.neighbors import KNeighborsRegressor as KNR
-from sklearn.linear_model import LinearRegression
 from matplotlib import pyplot
-import pre_processing
 
 class Ml_algorithms: 
     def __init__(self, df):
@@ -24,9 +22,7 @@ class Ml_algorithms:
         self.test.pop(0)
 
         self.df = self.df.shift(periods=1) 
-        pp = pre_processing.Pre_processing(self.df)
-        pp.clean_df()
-        self.df = pp.df
+        self.df = self.df.dropna()
 
     def get_data(self):
         '''
