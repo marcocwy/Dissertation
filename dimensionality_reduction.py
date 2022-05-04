@@ -92,10 +92,10 @@ class Dimensionality_reduction:
         sq_dists = sp.spatial.distance.pdist(df, 'sqeuclidean')
         # print(sq_dists)
 
-        # Convert pairwise distances into a square matrix.
+        # Convert pairwise distances into a square matrix
         mat_sq_dists = sp.spatial.distance.squareform(sq_dists)    
 
-        # Compute the symmetric kernel matrix.
+        # Compute the symmetric kernel matrix
         K = sp.exp(-gamma * mat_sq_dists)
 
         # Centering kernel matrix

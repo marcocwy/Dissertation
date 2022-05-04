@@ -90,7 +90,7 @@ class Main:
         f.populate_data_frame()   
         
         df = f.df.copy(deep=True)
-        print(df)
+        # print(df)
 
         ############################## Preprocessing dataframe ##############################
 
@@ -167,7 +167,7 @@ class Main:
         pred_df['Predicted Close'] = pred_close
         pred_df['Actual Close'] = actual_close
         
-        print(pred_df)
+        # print(pred_df)
 
         e = evaluation.Evaluation(pred)
         mae = e.mae()
@@ -182,12 +182,12 @@ class Main:
         temp_df.rename(columns={'Close': 'Actual Close'}, inplace=True)
         # print(temp_df)
         new_df = pd.concat([temp_df, pred_df])
-        print(new_df)
+        # print(new_df)
         new_df.plot(kind = 'line')
         plt.show()
         
-STOCK = "MSFT"
-Main(STOCK, savgol=False, SVR=True, T=10)
+STOCK = "NVDA"
+# Main(STOCK, savgol=False, SVR=True, T=10)
 # Main(STOCK, savgol=True, SVR=True, T=10)
 # Main(STOCK, savgol=False, PCA=10, SVR=True, T=10)
 # Main(STOCK, savgol=True, PCA=10, SVR=True, T=10)
@@ -196,11 +196,11 @@ Main(STOCK, savgol=False, SVR=True, T=10)
 # Main(STOCK, savgol=False, LVF=10, SVR=True, T=10)
 # Main(STOCK, savgol=True, LVF=10, SVR=True, T=10)
 
-# Main(STOCK, savgol=False, KNR=True, T=10)
-# Main(STOCK, savgol=True, KNR=True, T=10)
-# Main(STOCK, savgol=False, PCA=10, KNR=True, T=10)
-# Main(STOCK, savgol=True, PCA=10, KNR=True, T=10)
-# Main(STOCK, savgol=False, KPCA=10, KNR=True, T=10)
-# Main(STOCK, savgol=True, KPCA=10, KNR=True, T=10)
-# Main(STOCK, savgol=False, LVF=10, KNR=True, T=10)
-# Main(STOCK, savgol=True, LVF=10, KNR=True, T=10)
+Main(STOCK, savgol=False, KNR=True, T=10)
+Main(STOCK, savgol=True, KNR=True, T=10)
+Main(STOCK, savgol=False, PCA=10, KNR=True, T=10)
+Main(STOCK, savgol=True, PCA=10, KNR=True, T=10)
+Main(STOCK, savgol=False, KPCA=10, KNR=True, T=10)
+Main(STOCK, savgol=True, KPCA=10, KNR=True, T=10)
+Main(STOCK, savgol=False, LVF=10, KNR=True, T=10)
+Main(STOCK, savgol=True, LVF=10, KNR=True, T=10)
