@@ -7,6 +7,11 @@ Toggle features in Main():
     normalisation    :Boolean       # default=False
     savgol           :Boolean       # default=False
     PCA              :INT > 0       # default=0 (Not activated), Positive number of principle components
+    KCA              :INT > 0       # default=0 (Not activated), Positive number of principle components
+    LVF              :INT > 0       # default=0 (Not activated), Positive number of dimensions
+    SVR              :Boolean       # default=True
+    KNR              :Boolean       # default=False
+    T                :INT > 0       # default=10 , Number of days to predict
 
 Features implemented:
 -   Collect data from yFinance
