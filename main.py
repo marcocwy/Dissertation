@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 class Main:
     
-    def __init__(self, stock_name, savgol=False, PCA=0, KPCA=0, LVF=0, SVR=False, KNR=False, T=10):
+    def __init__(self, stock_name, savgol=False, PCA=0, KPCA=0, LVF=0, SVR=True, KNR=False, T=10):
         
         ############################## Get historical data ##############################
         start = "2020-03-02"
